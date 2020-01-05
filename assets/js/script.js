@@ -9,7 +9,7 @@ today = mm + '/' + dd + '/' + yyyy;
 let searchCity = $('#searchCity')
 let searchBtnEl = $('#searchBtn')
 let listGroupEl = $('.list-group')
-let cityArr = JSON.parse(localStorage.getItem("citiesArr")) || [];
+let cityArr = JSON.parse(localStorage.getItem("cityArr")) || [];
 
 let mainCardCall = function(city) {
   var APIKey = "eeca3fbc8f6a388ada5c13880dd30b30";
@@ -56,9 +56,14 @@ searchBtnEl.click(function () {
     newItem.text(city)
     listGroupEl.append(newItem)
   }
+  //Create and push object searched to Localstorage
+  let cityJSON = {
+    city: city
+  }
 
-
-  localStorage.setItem('city', JSON.stringify(cityArr))
+  cityArr.push(cityJSON)
+  cityArr.sort((a,b) => b.city - a.city )
+  localStorage.setItem('cityArr', JSON.stringify(cityArr))
 })
 
 
@@ -69,3 +74,15 @@ listGroupEl.click(function (e) {
   mainCardCall(elData)
 })
 
+function loadSearchedCities () {
+
+  $.each(cityArr, function (index, object) {
+
+    let newItem = $(`<li class="list-group-item list-group-item-action">`)
+    newItem.text(object.city)
+    listGroupEl.append(newItem)
+
+  })
+
+}
+loadSearchedCities()

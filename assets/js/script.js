@@ -11,6 +11,7 @@ let searchBtnEl = $('#searchBtn')
 let listGroupEl = $('.list-group')
 let cityArr = JSON.parse(localStorage.getItem("cityArr")) || [];
 
+//Functions
 let mainCardCall = function(city) {
   var APIKey = "eeca3fbc8f6a388ada5c13880dd30b30";
   var queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${APIKey}`;
@@ -34,12 +35,32 @@ let mainCardCall = function(city) {
       $("#mainTemp").text("Temperature: " + Math.round(response.main.temp) + " °F");
       $("#mainHumidity").text("Humidity: " + response.main.humidity + '%');
       $("#mainWind").text("Wind Speed: " + Math.round(response.wind.speed) + 'MPH');
-
       // Converts the temp to Kelvin with the below formula
       var tempF = (response.main.temp - 273.15) * 1.80 + 32;
       $(".tempF").text("Temperature (Kelvin) " + tempF);
 
+      //UV Index API call and appending functionality
+      var queryURLuv = `http://api.openweathermap.org/data/2.5/uvi/forecast?appid=${APIKey}&lat=${response.coord.lat}&lon=${response.coord.lon}&cnt=1`
+      $.ajax({
+        url: queryURLuv,
+        method: "GET"
+      })
+      .then(function(resp) {
+        $('#mainUv').text("UV Index: " + resp[0].value)
+      })
   });
+
+}
+
+function loadSearchedCities () {
+
+  $.each(cityArr, function (index, object) {
+
+    let newItem = $(`<li class="list-group-item list-group-item-action">`)
+    newItem.text(object.city)
+    listGroupEl.append(newItem)
+
+  })
 
 }
 
@@ -62,7 +83,6 @@ searchBtnEl.click(function () {
   }
 
   cityArr.push(cityJSON)
-  cityArr.sort((a,b) => b.city - a.city )
   localStorage.setItem('cityArr', JSON.stringify(cityArr))
 })
 
@@ -74,15 +94,6 @@ listGroupEl.click(function (e) {
   mainCardCall(elData)
 })
 
-function loadSearchedCities () {
 
-  $.each(cityArr, function (index, object) {
 
-    let newItem = $(`<li class="list-group-item list-group-item-action">`)
-    newItem.text(object.city)
-    listGroupEl.append(newItem)
-
-  })
-
-}
 loadSearchedCities()

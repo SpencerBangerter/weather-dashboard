@@ -9,6 +9,7 @@ today = mm + '/' + dd + '/' + yyyy;
 let searchCity = $('#searchCity')
 let searchBtnEl = $('#searchBtn')
 let listGroupEl = $('.list-group')
+let cardDeckEl = $('.card-deck')
 let cityArr = JSON.parse(localStorage.getItem("cityArr")) || [];
 
 let lastSearchedCity = JSON.parse(localStorage.getItem("lastSearchedCity"))
@@ -70,14 +71,34 @@ function loadSearchedCities () {
 function fiveDayCall (city) {
 
   forecastURL = `http://api.openweathermap.org/data/2.5/forecast?appid=${APIKey}&q=${city}`
-  
+  cardDeckEl.empty();
+
   $.ajax({
     url: forecastURL,
     method: "GET"
     })
     .then(function(forecast) {
       console.log(forecast)
-      
+
+
+      for (var i=1; i<6; i++) {
+        let newCard = $(`<div class="card bg-primary text-white"></div>`)
+        let newCardBody = $(`<div class="card-body"></div>`)
+        let newDate = $(`<h5 class="card-title"></h5>`)
+        let newIcon = $(`<img src="" alt="">`)
+        let newTemp = $(`<p class="card-text"></p>`)
+        let newHumidity = $(`<p class="card-text"></p>`)
+
+        newDate.text(forecast.list[i].dt_txt.slice(0, -9))
+        newIcon.attr('src', `http://openweathermap.org/img/w/${forecast.list[i].weather[0].icon}.png`)
+       
+        var tempF = (forecast.list[i].main.temp - 273.15) * 1.80 + 32;
+        newTemp.text("Temperature: " + Math.round(tempF) + " °F")
+        newHumidity.text("Humidity: " + forecast.list[i].main.humidity + '%')
+        cardDeckEl.append(newCard)
+        newCard.append(newCardBody)
+        newCardBody.append(newDate, newIcon, newTemp, newHumidity)
+      }
 
 
 

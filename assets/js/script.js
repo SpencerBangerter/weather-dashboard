@@ -11,6 +11,7 @@ let searchBtnEl = $('#searchBtn')
 let listGroupEl = $('.list-group')
 let cityArr = JSON.parse(localStorage.getItem("cityArr")) || [];
 
+let lastSearchedCity = JSON.parse(localStorage.getItem("lastSearchedCity"))
 //Functions
 let mainCardCall = function(city) {
   var APIKey = "eeca3fbc8f6a388ada5c13880dd30b30";
@@ -31,7 +32,9 @@ let mainCardCall = function(city) {
       console.log(response);
 
       // Transfer content to HTML
-      $("#mainCity").text(response.name + ' (' + today + ')' + response.weather[0].icon);
+      $("#mainCity").text(response.name + ' (' + today + ')');
+      $('#mainIcon').attr('src', `http://openweathermap.org/img/w/${response.weather[0].icon}.png`)
+      $('#mainIcon').attr('alt', `${response.weather[0].description}`)
       $("#mainTemp").text("Temperature: " + Math.round(response.main.temp) + " °F");
       $("#mainHumidity").text("Humidity: " + response.main.humidity + '%');
       $("#mainWind").text("Wind Speed: " + Math.round(response.wind.speed) + 'MPH');
@@ -84,6 +87,7 @@ searchBtnEl.click(function () {
 
   cityArr.push(cityJSON)
   localStorage.setItem('cityArr', JSON.stringify(cityArr))
+  localStorage.setItem('lastSearchedCity', JSON.stringify(city))
 })
 
 
@@ -92,8 +96,10 @@ listGroupEl.click(function (e) {
   elData = $(e.target).text()
   searchCity.val('')
   mainCardCall(elData)
+  localStorage.setItem('lastSearchedCity', JSON.stringify(elData))
 })
 
 
 
 loadSearchedCities()
+mainCardCall(lastSearchedCity)

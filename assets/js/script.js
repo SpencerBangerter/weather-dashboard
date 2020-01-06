@@ -81,7 +81,7 @@ function fiveDayCall (city) {
       console.log(forecast)
 
 
-      for (var i=1; i<6; i++) {
+      for (var i=1; i<48; i+=8) {
         let newCard = $(`<div class="card bg-primary text-white"></div>`)
         let newCardBody = $(`<div class="card-body"></div>`)
         let newDate = $(`<h5 class="card-title"></h5>`)

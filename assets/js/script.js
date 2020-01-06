@@ -12,9 +12,10 @@ let listGroupEl = $('.list-group')
 let cityArr = JSON.parse(localStorage.getItem("cityArr")) || [];
 
 let lastSearchedCity = JSON.parse(localStorage.getItem("lastSearchedCity"))
+var APIKey = "eeca3fbc8f6a388ada5c13880dd30b30";
+
 //Functions
 let mainCardCall = function(city) {
-  var APIKey = "eeca3fbc8f6a388ada5c13880dd30b30";
   var queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${APIKey}`;
 
   // Here we run our AJAX call to the OpenWeatherMap API
@@ -64,9 +65,25 @@ function loadSearchedCities () {
     listGroupEl.append(newItem)
 
   })
-
 }
 
+function fiveDayCall (city) {
+
+  forecastURL = `http://api.openweathermap.org/data/2.5/forecast?appid=${APIKey}&q=${city}`
+  
+  $.ajax({
+    url: forecastURL,
+    method: "GET"
+    })
+    .then(function(forecast) {
+      console.log(forecast)
+      
+
+
+
+
+  });
+}
 //OnClick Elements
 
 searchBtnEl.click(function () {
@@ -79,6 +96,7 @@ searchBtnEl.click(function () {
     let newItem = $(`<li class="list-group-item list-group-item-action">`)
     newItem.text(city)
     listGroupEl.append(newItem)
+    fiveDayCall(city)
   }
   //Create and push object searched to Localstorage
   let cityJSON = {
@@ -96,6 +114,7 @@ listGroupEl.click(function (e) {
   elData = $(e.target).text()
   searchCity.val('')
   mainCardCall(elData)
+  fiveDayCall(elData)
   localStorage.setItem('lastSearchedCity', JSON.stringify(elData))
 })
 
@@ -103,3 +122,4 @@ listGroupEl.click(function (e) {
 
 loadSearchedCities()
 mainCardCall(lastSearchedCity)
+fiveDayCall(lastSearchedCity)

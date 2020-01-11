@@ -45,7 +45,7 @@ let mainCardCall = function(city) {
       $(".tempF").text("Temperature (Kelvin) " + tempF);
 
       //UV Index API call and appending functionality
-      var queryURLuv = `http://api.openweathermap.org/data/2.5/uvi/forecast?appid=${APIKey}&lat=${response.coord.lat}&lon=${response.coord.lon}&cnt=1`
+      var queryURLuv = `https://api.openweathermap.org/data/2.5/uvi/forecast?appid=${APIKey}&lat=${response.coord.lat}&lon=${response.coord.lon}&cnt=1`
       $.ajax({
         url: queryURLuv,
         method: "GET"
@@ -124,7 +124,7 @@ searchBtnEl.click(function () {
   let cityJSON = {
     city: city
   }
-  
+
   cityArr.push(cityJSON)
   localStorage.setItem('cityArr', JSON.stringify(cityArr))
   localStorage.setItem('lastSearchedCity', JSON.stringify(city))

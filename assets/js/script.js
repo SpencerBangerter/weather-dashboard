@@ -12,7 +12,7 @@ let listGroupEl = $('.list-group')
 let cardDeckEl = $('.card-deck')
 let cityArr = JSON.parse(localStorage.getItem("cityArr")) || [];
 
-let lastSearchedCity = JSON.parse(localStorage.getItem("lastSearchedCity"))
+let lastSearchedCity = JSON.parse(localStorage.getItem("lastSearchedCity")) || 'Salt Lake City'
 var APIKey = "eeca3fbc8f6a388ada5c13880dd30b30";
 
 //Functions
@@ -53,8 +53,9 @@ let mainCardCall = function(city) {
       .then(function(resp) {
         $('#mainUv').text("UV Index: " + resp[0].value)
       })
-  });
-
+  }).fail(function(){
+    alert('City not found. Try again, please!');
+});
 }
 
 function loadSearchedCities () {
@@ -123,7 +124,7 @@ searchBtnEl.click(function () {
   let cityJSON = {
     city: city
   }
-
+  
   cityArr.push(cityJSON)
   localStorage.setItem('cityArr', JSON.stringify(cityArr))
   localStorage.setItem('lastSearchedCity', JSON.stringify(city))

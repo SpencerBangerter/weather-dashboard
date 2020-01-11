@@ -35,7 +35,7 @@ let mainCardCall = function(city) {
 
       // Transfer content to HTML
       $("#mainCity").text(response.name + ' (' + today + ')');
-      $('#mainIcon').attr('src', `http://openweathermap.org/img/w/${response.weather[0].icon}.png`)
+      $('#mainIcon').attr('src', `https://openweathermap.org/img/w/${response.weather[0].icon}.png`)
       $('#mainIcon').attr('alt', `${response.weather[0].description}`)
       $("#mainTemp").text("Temperature: " + Math.round(response.main.temp) + " °F");
       $("#mainHumidity").text("Humidity: " + response.main.humidity + '%');
@@ -71,7 +71,7 @@ function loadSearchedCities () {
 
 function fiveDayCall (city) {
 
-  forecastURL = `http://api.openweathermap.org/data/2.5/forecast?appid=${APIKey}&q=${city}`
+  forecastURL = `https://api.openweathermap.org/data/2.5/forecast?appid=${APIKey}&q=${city}`
   cardDeckEl.empty();
 
   $.ajax({
@@ -91,7 +91,7 @@ function fiveDayCall (city) {
         let newHumidity = $(`<p class="card-text"></p>`)
 
         newDate.text(forecast.list[i].dt_txt.slice(0, -9))
-        newIcon.attr('src', `http://openweathermap.org/img/w/${forecast.list[i].weather[0].icon}.png`)
+        newIcon.attr('src', `https://openweathermap.org/img/w/${forecast.list[i].weather[0].icon}.png`)
        
         var tempF = (forecast.list[i].main.temp - 273.15) * 1.80 + 32;
         newTemp.text("Temperature: " + Math.round(tempF) + " °F")
